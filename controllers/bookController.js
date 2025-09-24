@@ -1,17 +1,34 @@
 const book = require("../models/book");
 
 const getAllBooks = async (req, res) =>{
-try{
-const books = await book.find();
-    res.status(200).json(books);
-}catch(error){
-    res.status(500).json({message : error.message});
-}
+    try{
+        const { title, author, genre, publishYear } = req.query;
+        const filter = {};
+
+        if (title) {
+            // Use regex for a case-insensitive search on the title
+            filter.title = { $regex: title, $options: 'i' };
+        }
+        if (author) {
+            filter.author = author;
+        }
+        if (genre) {
+            filter.genre = { $regex: genre, $options: 'i' };
+        }
+        if (publishYear) {
+            filter.publishYear = publishYear;
+        }
+
+        const books = await book.find(filter).populate('author', 'name');
+        res.status(200).json(books);
+    }catch(error){
+        res.status(500).json({message : error.message});
+    }
 };
 
 const getBook = async (req, res) =>{
     try{
-        const book = await book.findbyId(req.params.id);
+        const book = await book.findById(req.params.id);
         if(!book){
             return res.status(404).json({message :"book not found"});
         }
