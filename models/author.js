@@ -9,6 +9,10 @@ const authorSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    bookCount: {
+        type: Number,
+        default: 0
+    },
     timestamp : {
         type :Date,
         default : Date.now
