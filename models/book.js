@@ -13,6 +13,9 @@ const bookSchema = new mongoose.Schema({
     publishYear: {
         type : Number
     },
+    genre: {
+        type: String
+    },
      timestamp : {
         type :Date,
         default : Date.now
